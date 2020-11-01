@@ -7,6 +7,17 @@ let htmlreplace = require('gulp-html-replace');
 let babel = require('gulp-babel');
 let browserify = require('browserify');
 let source = require('vinyl-source-stream');
+let buffer = require('vinyl-buffer');
+
+/**
+ * gulp.task(nombre, function() {
+*   return gulp.src('archivos/*.scss')
+    .pipe(sass())
+    .pipe(uglify())
+    .pipe(gulp.dest('dist/styles'))
+ * })
+ * 
+ */
 
 gulp.task('styles', function() {
   return gulp.src('src/styles/**/*.scss')
@@ -44,6 +55,8 @@ gulp.task('bundle', function() {
   })
     .bundle()
     .pipe(source('app.min.js'))
+    .pipe(buffer())
+    .pipe(uglify())
     .pipe(gulp.dest('dist/js'));
 })
 

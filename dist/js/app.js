@@ -1,26 +1,40 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.setPageTitle = setPageTitle;
+
 var _ajax = require("./services/ajax.js");
 
-var newsList = "<ul>\n  {{items}}\n</ul>";
-var newsListItem = "<li><a href=\"{{url}}\">{{title}}</a></li>";
+function setPageTitle() {
+  // Set title in HTML
+  var source = document.getElementById('heading').innerHTML;
+  var mainTemplate = Handlebars.compile(source);
+  var context = {
+    title: 'News Application',
+    isNew: true
+  };
+  document.getElementById('heading').innerHTML = mainTemplate(context);
+}
 
 function getHeadlines() {
-  var url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=59a12e101caf4769b2cf2cb82b677ef3';
+  var url = 'https://newsapi.org/v2/top-headlines?country=us&apiKey=1e30c02c90b84a46a828833a44569f18';
 
   _ajax.ajax.get(url).then(function (data) {
-    parseHeadlines(data.articles);
+    var source = document.getElementById('news-container').innerHTML;
+    var template = Handlebars.compile(source);
+    var context = {
+      headline: data.articles,
+      check: function check() {
+        return true;
+      }
+    };
+    document.getElementById('news-container').innerHTML = template(context);
   });
 }
 
-function parseHeadlines(data) {
-  var itemsHTML = '';
-  data.map(function (item) {
-    itemsHTML += newsListItem.replace('{{url}}', item.url).replace('{{title}}', item.title);
-  });
-  var newsHTML = newsList.replace('{{items}}', itemsHTML);
-  document.getElementById('news-container').innerHTML = newsHTML;
-  console.log('News HTML', newsHTML);
-}
-
-getHeadlines();
+document.addEventListener('DOMContentLoaded', function () {
+  setPageTitle();
+  getHeadlines();
+});
