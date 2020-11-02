@@ -17,7 +17,7 @@ http://newsapi.org/v2/everything?q=bitcoin&from=2020-08-19&sortBy=publishedAt&ap
 
 ## Desarrollo
 Este proyecto utiliza la librería `http-server` para correr la aplicación localmente. 
-Ejecuta el comando `npm start` y navega a `http://localhost:4046` para visualizar el proyecto. 
+Ejecuta el comando `npm start` y navega a `http://localhost:3000` para visualizar el proyecto. 
 
 Recuerda instalar las dependencias utilizando `npm install` si no se han instalado previamente. 
 
