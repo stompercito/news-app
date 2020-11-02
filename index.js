@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const handlebars = require('express-handlebars');
 const apiRoutes = require('./routes');
+const cors = require('cors');
 
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
@@ -17,6 +18,7 @@ const connectMongo = require('./src/controllers/db.controller');
 
 const app = express();
 const port = process.env.PORT || 3000;
+app.use(cors());
 
 app.engine('handlebars', handlebars());
 app.set('view engine', 'handlebars');

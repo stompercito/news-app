@@ -1,12 +1,10 @@
 const axios = require('axios');
 require('dotenv').config();
-const cors = require('cors');
 
 const apiUrl = process.env.API_URL;
-const apiKey = process.env.API_KEY;
+const apiKey = process.env.API_KEY;  
 
 function setNewsEndpoints(app) {
-  app.use(cors());
   
   app.get('/recientes', function(req, res) {
     const url = `${apiUrl}/top-headlines?country=mx&apiKey=${apiKey}`;
@@ -30,8 +28,8 @@ function setNewsEndpoints(app) {
     });
   });
 
-  app.get('/top-headlines/:country', function(req, res) {
-    let country = req.params.country;
+  app.get('/top-headlines', function(req, res) {
+    let country = req.query.country;
     const url = `${apiUrl}/top-headlines?country=${country}&apiKey=${apiKey}`;
     axios.get(url).then(response => {
       res.send(response.data);
@@ -44,26 +42,12 @@ function setNewsEndpoints(app) {
     });
   });
 
-  app.get('/noticias/:query', function(req, res) {
-    let query = req.params.query;
-    //https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb0bc5b6e99a4558a058c8f08cfa1e92
-    const url = `${apiUrl}/everything?q=${query}&apiKey=${apiKey}`;
-    axios.get(url).then(response => {
-      res.send(response.data);
-      console.log(response.data);
-      res.render('index', {
-        noticias: response.data.articles
-      });
-    }).catch(err => {
-      res.send('Failure');
-    });
-  });
+  app.get('/noticias', function(req, res) {
+    let query = req.query.q;
+    let source = req.query.source ? '&sources='+req.query.source : '';
 
-  app.get('/noticias/:query:source', function(req, res) {
-    let query = req.params.query;
-    let source = req.params.source;
-    //https://newsapi.org/v2/everything?q=bitcoin&apiKey=eb0bc5b6e99a4558a058c8f08cfa1e92
-    const url = `${apiUrl}/everything?q=${query}&source=${source}&apiKey=${apiKey}`;
+    //https://newsapi.org/v2/everything?q=bitcoin&domains=bbc,nyt,otromas&apiKey=eb0bc5b6e99a4558a058c8f08cfa1e92
+    const url = `${apiUrl}/everything?q=${query}${source}&apiKey=${apiKey}`;
     axios.get(url).then(response => {
       res.send(response.data);
       console.log(response.data);
